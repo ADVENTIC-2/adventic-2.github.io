@@ -33,7 +33,12 @@
 <body>
 
     <select id="img-select">
+        <option value="null">Please select a value</option>
     </select>
+
+    <div id="myBoundaryElement" resizable="true">
+        <img class="zoomables" id="zoomy1" src="images/161-1153-166-1157__2025-09-01__02.png" alt="Image 1">
+    </div>
 
     <script>
         const sel = document.getElementById("img-select");
@@ -44,16 +49,18 @@
                 objs.forEach((obj) =>
                 {
                     sel.innerHTML += `
-<option name=${obj.path}>${obj.name}</option>
+<option value="${obj.path}">${obj.name}</option>
 `;
+                    zoomy1.src = `http://raw.githubusercontent.com/adventic-2/adventic-2.github.io/main/${obj.path}`;
+                    sel.value = obj.path;
                 });
             });
         });
+        sel.addEventListener("input", () =>
+        {
+            zoomy1.src = `http://raw.githubusercontent.com/adventic-2/adventic-2.github.io/main/${sel.value}`;
+        });
     </script>
-
-    <div id="myBoundaryElement" resizable="true">
-        <img class="zoomables" id="zoomy1" src="images/161-1153-166-1157__2025-09-01__02.png" alt="Image 1">
-    </div>
 
     <script type="module">
         export default class Zoomy
