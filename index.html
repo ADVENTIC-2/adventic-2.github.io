@@ -32,10 +32,24 @@
 
 <body>
 
-    <h1>161-1153-166-1157__2025-09-01__02.png</h1>
-    <a><button>
-            <h1>Back</h1>
-        </button></a>
+    <select id="img-select">
+    </select>
+
+    <script>
+        const sel = document.getElementById("img-select");
+        fetch("https://api.github.com/repos/ADVENTIC-2/adventic-2.github.io/contents/images").then((resp) =>
+        {
+            resp.json().then((objs) =>
+            {
+                objs.forEach((obj) =>
+                {
+                    sel.innerHTML += `
+<option name=${obj.path}>${obj.name}</option>
+`;
+                });
+            });
+        });
+    </script>
 
     <div id="myBoundaryElement" resizable="true">
         <img class="zoomables" id="zoomy1" src="images/161-1153-166-1157__2025-09-01__02.png" alt="Image 1">
@@ -133,16 +147,6 @@
                     this.el.style.zIndex = '999999';
                     fn(e);
                 }, { passive: false });
-
-                this.boxEl.addEventListener('mouseleave', () =>
-                {
-                    if (!this.isDragging)
-                    {
-                        this.el.style.transform = 'matrix(1, 0, 0, 1, 0, 0)';
-                        this.el.style.transform = this.originalTransformValue;
-                        this.el.style.zIndex = this.originalZIndexValue;
-                    }
-                });
 
                 this.el.addEventListener('mousedown', fn, { passive: false });
 
