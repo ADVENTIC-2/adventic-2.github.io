@@ -36,8 +36,8 @@
     <select id="img-select">
         <option value="null">Please select a value</option>
     </select>
-    <button onclick="document.getElementById('img-select').selectedIndex--">Prev</button>
-    <button onclick="document.getElementById('img-select').selectedIndex++">Next</button>
+    <button onclick="sel.selectedIndex--;update();">Prev</button>
+    <button onclick="sel.selectedIndex--;update();">Next</button>
 
     <div id="myBoundaryElement" resizable="true">
         <img class="zoomables" id="zoomy1" src="images/161-1153-166-1157__2025-09-01__02.png" alt="Image 1">
@@ -45,24 +45,27 @@
 
     <script>
         const sel = document.getElementById("img-select");
-        fetch("https://api.github.com/repos/ADVENTIC-2/adventic-2.github.io/contents/images").then((resp) =>
+        function update()
         {
-            resp.json().then((objs) =>
+            fetch("https://api.github.com/repos/ADVENTIC-2/adventic-2.github.io/contents/images").then((resp) =>
             {
-                objs.forEach((obj) =>
+                resp.json().then((objs) =>
                 {
-                    sel.innerHTML += `
+                    objs.forEach((obj) =>
+                    {
+                        sel.innerHTML += `
 <option value="${obj.path}">${obj.name}</option>
 `;
-                    zoomy1.src = `http://raw.githubusercontent.com/adventic-2/adventic-2.github.io/main/${obj.path}`;
-                    sel.value = obj.path;
+                        zoomy1.src = `http://raw.githubusercontent.com/adventic-2/adventic-2.github.io/main/${obj.path}`;
+                        sel.value = obj.path;
+                    });
                 });
             });
-        });
-        sel.addEventListener("input", () =>
-        {
-            zoomy1.src = `http://raw.githubusercontent.com/adventic-2/adventic-2.github.io/main/${sel.value}`;
-        });
+            sel.addEventListener("input", () =>
+            {
+                zoomy1.src = `http://raw.githubusercontent.com/adventic-2/adventic-2.github.io/main/${sel.value}`;
+            });
+        }
     </script>
 
     <script type="module">
