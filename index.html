@@ -45,27 +45,28 @@
 
     <script>
         const sel = document.getElementById("img-select");
-        function update()
+        fetch("https://api.github.com/repos/ADVENTIC-2/adventic-2.github.io/contents/images").then((resp) =>
         {
-            fetch("https://api.github.com/repos/ADVENTIC-2/adventic-2.github.io/contents/images").then((resp) =>
+            resp.json().then((objs) =>
             {
-                resp.json().then((objs) =>
+                objs.forEach((obj) =>
                 {
-                    objs.forEach((obj) =>
-                    {
-                        sel.innerHTML += `
+                    sel.innerHTML += `
 <option value="${obj.path}">${obj.name}</option>
 `;
-                        zoomy1.src = `http://raw.githubusercontent.com/adventic-2/adventic-2.github.io/main/${obj.path}`;
-                        sel.value = obj.path;
-                    });
+                    zoomy1.src = `http://raw.githubusercontent.com/adventic-2/adventic-2.github.io/main/${obj.path}`;
+                    sel.value = obj.path;
                 });
             });
-            sel.addEventListener("input", () =>
-            {
-                zoomy1.src = `http://raw.githubusercontent.com/adventic-2/adventic-2.github.io/main/${sel.value}`;
-            });
-        }
+        });
+        sel.addEventListener("input", () =>
+        {
+            zoomy1.src = `http://raw.githubusercontent.com/adventic-2/adventic-2.github.io/main/${sel.value}`;
+        });
+        const update = () =>
+        {
+            zoomy1.src = `http://raw.githubusercontent.com/adventic-2/adventic-2.github.io/main/${sel.value}`;
+        };
     </script>
 
     <script type="module">
