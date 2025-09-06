@@ -9,6 +9,7 @@
         body {
             user-select: none;
             -moz-user-select: none;
+            touch-action: none;
         }
 
         .zoomables {
@@ -149,7 +150,7 @@
                 this.originalZIndexValue = window.getComputedStyle(this.el).zIndex;
                 this.originalTransformValue = window.getComputedStyle(this.el).transform;
 
-                ['mousemove', 'mouseup'].forEach(
+                ['mousemove', 'mouseup', 'touchend'].forEach(
                     event =>
                     {
                         document.addEventListener(event, fn, { passive: false });
@@ -163,6 +164,7 @@
                 }, { passive: false });
 
                 this.el.addEventListener('mousedown', fn, { passive: false });
+                this.el.addEventListener('touchstart', fn, { passive: false });
 
             }
 
@@ -187,11 +189,11 @@
                     currentBottom = img.bottom;
 
                 this.isDragging = false;
-                if (e.type === 'mousedown')
+                if (e.type === 'mousedown' || e.type === 'touchstart')
                 {
                     this.mouseIsDown = true;
                 }
-                if (e.type === 'mouseup')
+                if (e.type === 'mouseup' || e.type === 'touchen')
                 {
                     this.mouseIsDown = false;
                 }
@@ -466,13 +468,14 @@
              */
             detach()
             {
-                ['mousemove', 'mouseup'].forEach(
+                ['mousemove', 'mouseup', 'touchend'].forEach(
                     event => document.removeEventListener(event, this.handleMouseEvents)
                 );
                 ['wheel', 'mouseleave'].forEach(
                     event => this.boxEl.removeEventListener(event, this.handleMouseEvents)
                 );
                 this.el.removeEventListener('mousedown', this.handleMouseEvents);
+                this.el.removeEventListener('touchstart', this.handleMouseEvents);
             }
 
             /**
@@ -498,6 +501,7 @@
              */
             handleMouseEvents(e)
             {
+                e.preventDefault();
                 if (!this.enabled)
                 {
                     return false;
