@@ -16,8 +16,6 @@
             width: 100%;
             image-rendering: pixelated;
             touch-action: none;
-            user-drag: none;
-            -webkit-user-drag: none;
             user-select: none;
             -moz-user-select: none;
             -webkit-user-select: none;
@@ -35,8 +33,6 @@
             justify-content: center;
             resize: both;
             touch-action: none;
-            user-drag: none;
-            -webkit-user-drag: none;
             user-select: none;
             -moz-user-select: none;
             -webkit-user-select: none;
@@ -53,8 +49,10 @@
     <button onclick="sel.selectedIndex--;update();">Prev</button>
     <button onclick="sel.selectedIndex--;update();">Next</button>
 
-    <button onclick="zoomy1.transformByMouseEvent({deltaY: -2, btnoverride:true, x:window.screen.availWidth/2, y:window.screen.availHeight/2, preventDefault: ()=>{}})">Zoom In</button>
-    <button onclick="zoomy1.transformByMouseEvent({deltaY: 2, btnoverride:true, x:window.screen.availWidth/2, y:window.screen.availHeight/2, preventDefault: ()=>{}})">Zoom Out</button>
+    <button onclick="zoomy1.transformByMouseEvent({factorOverride: 0.2, deltaY: -1, btnoverride:true, x:window.screen.availWidth/2, y:window.screen.availHeight/2, preventDefault: ()=>{}})">Zoom In</button>
+    <button onclick="zoomy1.transformByMouseEvent({factorOverride: 2, deltaY: -1, btnoverride:true, x:window.screen.availWidth/2, y:window.screen.availHeight/2, preventDefault: ()=>{}})">Zoom In MOAR</button>
+    <button onclick="zoomy1.transformByMouseEvent({factorOverride: 0.2, deltaY: 1, btnoverride:true, x:window.screen.availWidth/2, y:window.screen.availHeight/2, preventDefault: ()=>{}})">Zoom Out</button>
+    <button onclick="zoomy1.transformByMouseEvent({factorOverride: 0.7, deltaY: 1, btnoverride:true, x:window.screen.availWidth/2, y:window.screen.availHeight/2, preventDefault: ()=>{}})">Zoom Out MOAR</button>
 
     <div id="myBoundaryElement" resizable="true">
         <img draggable="false" class="zoomables" id="zoomy1a" src="images/161-1153-166-1157__2025-09-01__02.png" alt="Image 1">
@@ -166,10 +164,16 @@
                 this.originalZIndexValue = window.getComputedStyle(this.el).zIndex;
                 this.originalTransformValue = window.getComputedStyle(this.el).transform;
 
-                ['mousemove', 'touchmove', 'mouseup', 'touchend'].forEach(
+                ['mousemove', 'mouseup'].forEach(
                     event =>
                     {
                         document.addEventListener(event, fn, { passive: false });
+                    }
+                );
+                ['touchmove', 'touchend'].forEach(
+                    event =>
+                    {
+                        document.addEventListener(event, fn, { passive: true });
                     }
                 );
 
@@ -180,7 +184,7 @@
                 }, { passive: false });
 
                 this.el.addEventListener('mousedown', fn, { passive: false });
-                this.el.addEventListener('touchstart', fn, { passive: false });
+                this.el.addEventListener('touchstart', fn, { passive: true });
 
             }
 
@@ -293,7 +297,7 @@
                         zoomInImage = this.boxEl.contains(e.target),
                         isShrinking = e.deltaY > 0,
                         enlargeOrShrinkBy = 0,
-                        zoomFactor = .1,
+                        zoomFactor = e.factorOverride ? e.factorOverride : .1,
                         currentScale = Math.round((img.width / this.el.offsetWidth) * 10) / 10,
                         fitsEntirely = widthFits && heightFits,
                         sideFits = widthFits || heightFits;
@@ -436,7 +440,7 @@
                 }
 
                 this.transform(this.el, moveXBy, moveYBy, enlargeOrShrinkBy);
-                if (!(e.type === 'touchstart' || e.type === 'touchmove'))
+                if (!(e.type === 'touchstart' || e.type === 'touchmove' || e.type === 'touchend'))
                     e.preventDefault();
 
                 this.lastMouseX = currentMouseX;
@@ -530,7 +534,7 @@
                 this.transformByMouseEvent(e);
             }
         }
-        const zoomy1 = new Zoomy("zoomy1a", { zoomUpperConstraint: 700 });
+        const zoomy1 = new Zoomy("zoomy1a", { zoomUpperConstraint: 70000 });
         zoomy1.enable();
     </script>
 </body>
