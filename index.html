@@ -57,6 +57,9 @@
         <img draggable="false" class="zoomables" id="zoomy1" src="images/161-1153-166-1157__2025-09-01__02.png" alt="Image 1">
     </div>
 
+    <button onclick="zoomy1.transformByMouseEvent({deltaY: 1, x:0, y:0})">Zoom In</button>
+    <button onclick="zoomy1.transformByMouseEvent({deltaY: -1, x:0, y:0})">Zoom Out</button>
+
     <script>
         const sel = document.getElementById("img-select");
         fetch("https://api.github.com/repos/ADVENTIC-2/adventic-2.github.io/contents/images").then((resp) =>
@@ -163,7 +166,7 @@
                 this.originalZIndexValue = window.getComputedStyle(this.el).zIndex;
                 this.originalTransformValue = window.getComputedStyle(this.el).transform;
 
-                ['mousemove', 'mouseup', 'touchend'].forEach(
+                ['mousemove', 'touchmove', 'mouseup', 'touchend'].forEach(
                     event =>
                     {
                         document.addEventListener(event, fn, { passive: false });
@@ -187,7 +190,7 @@
              */
             transformByMouseEvent(e)
             {
-                console.log(e.type);
+                console.log(e);
                 var currentMouseX = e.x,
                     currentMouseY = e.y,
                     moveXBy = 0,
@@ -200,6 +203,11 @@
                     currentRight = img.right,
                     currentTop = img.top,
                     currentBottom = img.bottom;
+                if ((e.type === 'touchstart' || e.type === 'touchmove') && e.touches.length == 1)
+                {
+                    currentMouseX = e.touches[0].clientX;
+                    currentMouseY = e.touches[0].clientY;
+                }
 
                 this.isDragging = false;
                 if (e.type === 'mousedown' || e.type === 'touchstart')
@@ -210,7 +218,7 @@
                 {
                     this.mouseIsDown = false;
                 }
-                if (this.mouseIsDown && (e.type === 'mousemove' || e.type === 'mouseleave'))
+                if (this.mouseIsDown && (e.type === 'mousemove' || e.type === 'touchmove' || e.type === 'mouseleave'))
                 {
                     this.isDragging = true;
                 }
@@ -481,7 +489,7 @@
              */
             detach()
             {
-                ['mousemove', 'mouseup', 'touchend'].forEach(
+                ['mousemove', 'touchmove', 'mouseup', 'touchend'].forEach(
                     event => document.removeEventListener(event, this.handleMouseEvents)
                 );
                 ['wheel', 'mouseleave'].forEach(
