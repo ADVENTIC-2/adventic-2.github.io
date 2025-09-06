@@ -54,11 +54,11 @@
     <button onclick="sel.selectedIndex--;update();">Next</button>
 
     <div id="myBoundaryElement" resizable="true">
-        <img draggable="false" class="zoomables" id="zoomy1" src="images/161-1153-166-1157__2025-09-01__02.png" alt="Image 1">
+        <img draggable="false" class="zoomables" id="zoomy1a" src="images/161-1153-166-1157__2025-09-01__02.png" alt="Image 1">
     </div>
 
-    <button onclick="zoomy1.transformByMouseEvent({deltaY: 1, x:0, y:0})">Zoom In</button>
-    <button onclick="zoomy1.transformByMouseEvent({deltaY: -1, x:0, y:0})">Zoom Out</button>
+    <button onclick="zoomy1.transformByMouseEvent({deltaY: -2, btnoverride:true, x:window.screen.availWidth/2, y:window.screen.availHeight/2, preventDefault: ()=>{}})">Zoom In</button>
+    <button onclick="zoomy1.transformByMouseEvent({deltaY: 2, btnoverride:true, x:window.screen.availWidth/2, y:window.screen.availHeight/2, preventDefault: ()=>{}})">Zoom Out</button>
 
     <script>
         const sel = document.getElementById("img-select");
@@ -71,23 +71,23 @@
                     sel.innerHTML += `
 <option value="${obj.path}">${obj.name}</option>
 `;
-                    zoomy1.src = `http://raw.githubusercontent.com/adventic-2/adventic-2.github.io/main/${obj.path}`;
+                    zoomy1a.src = `http://raw.githubusercontent.com/adventic-2/adventic-2.github.io/main/${obj.path}`;
                     sel.value = obj.path;
                 });
             });
         });
         sel.addEventListener("input", () =>
         {
-            zoomy1.src = `http://raw.githubusercontent.com/adventic-2/adventic-2.github.io/main/${sel.value}`;
+            zoomy1a.src = `http://raw.githubusercontent.com/adventic-2/adventic-2.github.io/main/${sel.value}`;
         });
         const update = () =>
         {
-            zoomy1.src = `http://raw.githubusercontent.com/adventic-2/adventic-2.github.io/main/${sel.value}`;
+            zoomy1a.src = `http://raw.githubusercontent.com/adventic-2/adventic-2.github.io/main/${sel.value}`;
         };
     </script>
 
-    <script type="module">
-        export default class Zoomy
+    <script>
+        class Zoomy
         {
             /**
              *The HTML element we want to transform
@@ -190,7 +190,7 @@
              */
             transformByMouseEvent(e)
             {
-                console.log(e);
+                // console.log(e.type);
                 var currentMouseX = e.x,
                     currentMouseY = e.y,
                     moveXBy = 0,
@@ -317,7 +317,7 @@
                     }
                     else
                     {
-                        if (zoomInImage)
+                        if (zoomInImage || e.btnoverride)
                         {
                             if (!fitsEntirely)
                             {
@@ -530,7 +530,7 @@
                 this.transformByMouseEvent(e);
             }
         }
-        const zoomy1 = new Zoomy("zoomy1", { zoomUpperConstraint: 700 });
+        const zoomy1 = new Zoomy("zoomy1a", { zoomUpperConstraint: 700 });
         zoomy1.enable();
     </script>
 </body>
