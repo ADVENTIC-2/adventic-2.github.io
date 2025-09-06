@@ -53,12 +53,12 @@
     <button onclick="sel.selectedIndex--;update();">Prev</button>
     <button onclick="sel.selectedIndex--;update();">Next</button>
 
+    <button onclick="zoomy1.transformByMouseEvent({deltaY: -2, btnoverride:true, x:window.screen.availWidth/2, y:window.screen.availHeight/2, preventDefault: ()=>{}})">Zoom In</button>
+    <button onclick="zoomy1.transformByMouseEvent({deltaY: 2, btnoverride:true, x:window.screen.availWidth/2, y:window.screen.availHeight/2, preventDefault: ()=>{}})">Zoom Out</button>
+
     <div id="myBoundaryElement" resizable="true">
         <img draggable="false" class="zoomables" id="zoomy1a" src="images/161-1153-166-1157__2025-09-01__02.png" alt="Image 1">
     </div>
-
-    <button onclick="zoomy1.transformByMouseEvent({deltaY: -2, btnoverride:true, x:window.screen.availWidth/2, y:window.screen.availHeight/2, preventDefault: ()=>{}})">Zoom In</button>
-    <button onclick="zoomy1.transformByMouseEvent({deltaY: 2, btnoverride:true, x:window.screen.availWidth/2, y:window.screen.availHeight/2, preventDefault: ()=>{}})">Zoom Out</button>
 
     <script>
         const sel = document.getElementById("img-select");
