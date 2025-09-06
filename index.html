@@ -190,7 +190,7 @@
              */
             transformByMouseEvent(e)
             {
-                // console.log(e.type);
+                console.log(e.type);
                 var currentMouseX = e.x,
                     currentMouseY = e.y,
                     moveXBy = 0,
@@ -436,7 +436,8 @@
                 }
 
                 this.transform(this.el, moveXBy, moveYBy, enlargeOrShrinkBy);
-                e.preventDefault();
+                if (!(e.type === 'touchstart' || e.type === 'touchmove'))
+                    e.preventDefault();
 
                 this.lastMouseX = currentMouseX;
                 this.lastMouseY = currentMouseY;
@@ -522,7 +523,6 @@
              */
             handleMouseEvents(e)
             {
-                e.preventDefault();
                 if (!this.enabled)
                 {
                     return false;
